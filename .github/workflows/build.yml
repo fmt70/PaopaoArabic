@@ -1,14 +1,15 @@
 name: Build Dylib
 
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Theos
         run: |
@@ -20,7 +21,9 @@ jobs:
           make FINALPACKAGE=1
 
       - name: Upload Dylib
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PaopaoArabic-Dylib
-          path: obj/debug/*.dylib
+          path: |
+            .theos/obj/debug/*.dylib
+            obj/*.dylib
